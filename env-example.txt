@@ -1,0 +1,3 @@
+OPENAI_API_KEY="sua-chave-aqui"
+ACCESS_TOKEN="seu-token-aqui"
+INSTAGRAM_ACCOUNT_ID="seu-token-aqui"
