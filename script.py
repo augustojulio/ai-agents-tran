@@ -80,25 +80,31 @@ crew = Crew(
 if __name__ == "__main__":
     # Coletar dados
     data = test_facebook_api()
-    print(f"test_facebook_api: {data}")
     ads_data = get_facebook_ads_insights()
-    print(f"ads_data: {ads_data}")
     
-    # Executa CrewAI para análise e relatório
-    # result = crew.kickoff()
+    # print(f"test_facebook_api: {data}")
+    # print(f"ads_data: {ads_data}")
     
-    # Cria um relatório simples com os dados
-    # report = f"""
-    # 📊 Relatório de Tráfego:
-    # - Impressões: {data['data'][0]['category']}
-    # - Alcance: {data['data'][0]['category_list'][0]}
-    # - Visualizações de Perfil: {data['data'][0]['name']}
+    # Verifica se ads_data tem dados válidos
+    dados_para_analise = ads_data.get("data", [])
     
-    # 📢 Insights:
-    # {result}
-    # """
+    if not dados_para_analise:  
+        print("⚠️ Nenhum dado de anúncios encontrado. Usando dados do Facebook API para relatório.")
+        dados_para_analise = data  # Usa os dados do Facebook em vez de Ads
+    
+    # Passa os dados para análise da CrewAI
+    crew.kickoff(inputs={"dados": dados_para_analise})
+    
+    # Criar relatório
+    report = f"""
+    📊 Relatório de Tráfego:
+    {dados_para_analise}
 
-    # # - Impressões: {data['data'][0]['values'][0]['value']}
-    # # - Alcance: {data['data'][1]['values'][0]['value']}
-    # # - Visualizações de Perfil: {data['data'][2]['values'][0]['value']}
-    # print(f"reportt: {report}")
+    📢 Insights:
+    - Impressões: {dados_para_analise[0]['impressions'] if isinstance(dados_para_analise, list) and dados_para_analise else "N/A"}
+    - Alcance: {dados_para_analise[0]['reach'] if isinstance(dados_para_analise, list) and dados_para_analise else "N/A"}
+    - Cliques: {dados_para_analise[0]['clicks'] if isinstance(dados_para_analise, list) and dados_para_analise else "N/A"}
+    - Investimento: {dados_para_analise[0]['spend'] if isinstance(dados_para_analise, list) and dados_para_analise else "N/A"}
+    """
+
+    print(report)
