@@ -6,14 +6,11 @@ from dotenv import load_dotenv
 # Carregar variáveis de ambiente
 load_dotenv()
 ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
-INSTAGRAM_ACCOUNT_ID = os.getenv("INSTAGRAM_ACCOUNT_ID")
 
 # Função para pegar estatísticas do Instagram
-def get_instagram_insights():
-    url = f"https://graph.facebook.com/v18.0/{INSTAGRAM_ACCOUNT_ID}/insights"
+def test_facebook_api():
+    url = f"https://graph.facebook.com/v22.0/me"
     params = {
-        "metric": "impressions,reach,profile_views",
-        "period": "day",
         "access_token": ACCESS_TOKEN
     }
     response = requests.get(url, params=params)
@@ -68,24 +65,24 @@ crew = Crew(
 
 if __name__ == "__main__":
     # Coletar dados
-    data = get_instagram_insights()
+    data = test_facebook_api()
     print(data)
     
     # Executa CrewAI para análise e relatório
-    result = crew.kickoff()
+    # result = crew.kickoff()
     
     # Cria um relatório simples com os dados
-    report = f"""
-    📊 Relatório de Tráfego:
-    - Impressões: {data['data'][0]['category']}
-    - Alcance: {data['data'][0]['category_list'][0]}
-    - Visualizações de Perfil: {data['data'][0]['name']}
+    # report = f"""
+    # 📊 Relatório de Tráfego:
+    # - Impressões: {data['data'][0]['category']}
+    # - Alcance: {data['data'][0]['category_list'][0]}
+    # - Visualizações de Perfil: {data['data'][0]['name']}
     
-    📢 Insights:
-    {result}
-    """
+    # 📢 Insights:
+    # {result}
+    # """
 
-    # - Impressões: {data['data'][0]['values'][0]['value']}
-    # - Alcance: {data['data'][1]['values'][0]['value']}
-    # - Visualizações de Perfil: {data['data'][2]['values'][0]['value']}
-    print(f"reportt: {report}")
+    # # - Impressões: {data['data'][0]['values'][0]['value']}
+    # # - Alcance: {data['data'][1]['values'][0]['value']}
+    # # - Visualizações de Perfil: {data['data'][2]['values'][0]['value']}
+    # print(f"reportt: {report}")
