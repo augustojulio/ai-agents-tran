@@ -16,6 +16,20 @@ def test_facebook_api():
     response = requests.get(url, params=params)
     return response.json()
 
+# Função para pegar dados da API de Marketing do Facebook
+def get_facebook_ads_insights():
+    AD_ACCOUNT_ID = os.getenv("AD_ACCOUNT_ID")
+    url = f"https://graph.facebook.com/v22.0/act_{AD_ACCOUNT_ID}/insights"
+    params = {
+        "fields": "campaign_name,impressions,reach,clicks,spend",
+        "level": "campaign",
+        "time_range": '{"since":"2024-01-01","until":"2025-02-01"}',  
+        "access_token": ACCESS_TOKEN
+    }
+
+    response = requests.get(url, params=params)
+    return response.json()
+
 # Definir agentes
 coletor = Agent(
     name="Coletor de Dados",
@@ -66,7 +80,9 @@ crew = Crew(
 if __name__ == "__main__":
     # Coletar dados
     data = test_facebook_api()
-    print(data)
+    print(f"test_facebook_api: {data}")
+    ads_data = get_facebook_ads_insights()
+    print(f"ads_data: {ads_data}")
     
     # Executa CrewAI para análise e relatório
     # result = crew.kickoff()
